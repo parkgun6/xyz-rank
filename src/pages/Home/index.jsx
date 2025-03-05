@@ -49,6 +49,7 @@ const Home = () => {
         />
       </Box>
       <MonthlyRanking />
+      
       <RankingList />
     </Box >
     </>
