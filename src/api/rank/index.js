@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { fbdb } from "../../config/firebase-config";
-import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import { addDoc, collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 
 export const authQueryKeys = {
   ranks: ['ranks'],
