@@ -6,7 +6,7 @@ import { useLogout } from "../../api/auth";
 import logo from "../../assets/logo.png";
 import { userAtom } from "../../atoms/atoms";
 import MonthlyRanking from "../../components/MonthlyRanking";
-import RankingList from "../../components/rankingList";
+import RankingList from "../../components/RankingList";
 
 const Home = () => {
   const navigator = useNavigate();
@@ -49,7 +49,6 @@ const Home = () => {
         />
       </Box>
       <MonthlyRanking />
-      
       <RankingList />
     </Box >
     </>
