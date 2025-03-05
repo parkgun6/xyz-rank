@@ -3,12 +3,14 @@ import { Box, Button, IconButton, Stack, TextField } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useState } from "react";
 import { useInsertRank } from "../../../api/rank";
+import { useNavigate } from "react-router-dom";
 
 const InsertRank = () => {
     const [gameName, setGameName] = useState("");
     const [players, setPlayers] = useState([{ position: "1등", name: "", point: "" }]);
     const dateTime = dayjs();
     const insertRankMutation = useInsertRank();
+    const navigator = useNavigate();
 
     const handleChange = (position, field, value) => {
         setPlayers((prev) =>
@@ -36,6 +38,8 @@ const InsertRank = () => {
         };
         try {
             await insertRankMutation.mutateAsync(rankData)
+            alert("저장이 완료되었습니다!");
+            navigator(-1); // 이전 페이지로 이동
         } catch (e) {
             console.error("Error", e)
         }
