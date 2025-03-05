@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { useSetAtom } from 'jotai';
 import { userAtom } from '../../atoms/atoms';
-import { firebase_app } from '../firebase/config';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { firebase_app } from '../../../firebase-config';
 
 const db = getFirestore(firebase_app);
 
