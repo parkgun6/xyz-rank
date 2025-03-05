@@ -1,10 +1,9 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, Box } from "@mui/material";
-import { useMonthlyRanking } from "../../../hooks/useMonthlyRanking";
+import { useMonthlyRanking } from "../../hooks/useMonthlyRanking";
 
 const MonthlyRanking = () => {
   const { ranking, isLoading, error } = useMonthlyRanking();
-
   if (isLoading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">Error loading data</Typography>;
 

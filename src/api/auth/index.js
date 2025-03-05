@@ -2,9 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { useSetAtom } from 'jotai';
 import { userAtom } from '../../atoms/atoms';
-import { firebase_app } from '../../config/firebase-config';
-
-const db = getFirestore(firebase_app);
+import { fbdb } from '../../config/firebase-config';
 
 export const authQueryKeys = {
   auth: ['auth'],
@@ -17,7 +15,7 @@ export const useLogin = () => {
   const loginMutation = useMutation({
     mutationFn: async (loginData) => {
       const { username, password } = loginData;
-      const response = await getDocs(collection(db, "users"));
+      const response = await getDocs(collection(fbdb, "users"));
       const resUsername = response.docs[0].data().username;
       const resPassword = response.docs[0].data().password;
       if (resUsername === username & resPassword === password) {

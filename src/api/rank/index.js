@@ -1,20 +1,57 @@
-import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { firebase_app } from "../../config/firebase-config";
-
-const db = getFirestore(firebase_app);
-
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
+import { fbdb } from "../../config/firebase-config";
+import { collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 
 export const authQueryKeys = {
   ranks: ['ranks'],
 };
+
+const PAGE_SIZE = 10; // 한 번에 가져올 데이터 개수
+
+export const useFetchRankingsPaging = () => {
+  return useInfiniteQuery({
+    queryKey: ["rankings"],
+    queryFn: async ({ pageParam = null }) => {
+      const rankCollection = collection(fbdb, "rank");
+      let rankQuery = query(rankCollection, orderBy("dateTime", "desc"), limit(PAGE_SIZE))
+      
+      if (pageParam) {
+        rankQuery = query(rankCollection, orderBy("dateTime", "desc"), startAfter(pageParam), limit(PAGE_SIZE));
+      }
+
+      try {
+        const snapshot = await getDocs(rankQuery);
+        
+        if (snapshot.empty) {
+          return { rankings: [], lastVisible: null }; // 빈 데이터를 반환
+        }
+
+        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+
+        const rankings = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        return { rankings, lastVisible };
+      } catch (error) {
+        console.error("Error fetching rankings:", error);
+        throw error;
+      }
+    },
+    getNextPageParam: (lastPage) => {
+      return lastPage.lastVisible || undefined;
+    },
+  });
+};
+
 
 export const useFetchRanks = () => {
   return useQuery({
     queryKey: authQueryKeys.ranks,
     queryFn: async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "rank"));
+        const querySnapshot = await getDocs(collection(fbdb, "rank"));
         return querySnapshot.docs.map((doc) => ({
           id: doc.id, // Firestore 문서 ID
           ...doc.data(),
@@ -31,7 +68,7 @@ export const useInsertRank = () => {
   return useMutation({
     mutationFn: async (rankData) => {
       try {
-        const docRef = await addDoc(collection(db, "rank"), {
+        const docRef = await addDoc(collection(fbdb, "rank"), {
           gameName: rankData.gameName,
           ranking: rankData.ranking,
           dateTime: rankData.dateTime
