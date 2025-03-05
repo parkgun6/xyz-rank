@@ -75,7 +75,7 @@ const Home = () => {
           ))}
         </List>
       ) : (
-        <Typography sx={{ textAlign: "center", color: "gray" }}>No ranking data available</Typography>
+        <Typography sx={{ textAlign: "center", color: "gray" }}>아직 데이터가 없습니다.</Typography>
       )}
     </Box >
     </>
