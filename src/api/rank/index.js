@@ -1,6 +1,6 @@
 import { addDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { firebase_app } from "../../../firebase-config";
+import { firebase_app } from "../../config/firebase-config";
 
 const db = getFirestore(firebase_app);
 
