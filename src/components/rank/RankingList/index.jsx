@@ -1,5 +1,5 @@
 import { List, ListItem, Paper, Typography, Button } from "@mui/material";
-import { useFetchRankingsPaging } from "../../api/rank";
+import { useFetchRankingsPaging } from "../../../api/rank";
 
 const RankingList = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchRankingsPaging();

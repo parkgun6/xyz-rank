@@ -31,11 +31,24 @@ const InsertRank = () => {
     };
 
     const handleSubmit = async () => {
+        if (!gameName) {
+            alert("게임 이름을 입력해주세요.");
+            return;
+        }
+    
+        for (const player of players) {
+            if (!player.name || !player.point) {
+                alert(`${player.position} 참가자의 이름과 점수를 모두 입력해주세요.`);
+                return;
+            }
+        }
+
         const rankData = {
             gameName,
             ranking: players,
             dateTime: dateTime.format("YYYY-MM-DD HH:mm:ss"),
         };
+        
         try {
             await insertRankMutation.mutateAsync(rankData)
             alert("저장이 완료되었습니다!");

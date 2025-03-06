@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useLogout } from "../../api/auth";
 import logo from "../../assets/logo.png";
 import { userAtom } from "../../atoms/atoms";
-import MonthlyRanking from "../../components/MonthlyRanking";
-import RankingList from "../../components/RankingList";
+import MonthlyRanking from "../../components/rank/MonthlyRanking";
+import RankingList from "../../components/rank/RankingList";
 
 const Home = () => {
   const navigator = useNavigate();
