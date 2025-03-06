@@ -1,9 +1,26 @@
-import { List, ListItem, Paper, Typography, Button } from "@mui/material";
-import { useFetchRankingsPaging } from "../../../api/rank";
+import { List, ListItem, Paper, Typography, Button, IconButton } from "@mui/material";
+import { useDeleteRank, useFetchRankingsPaging } from "../../../api/rank";
+import { Close } from "@mui/icons-material";
+import { useAtom } from "jotai";
+import { userAtom } from "../../../atoms/atoms";
 
 const RankingList = () => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useFetchRankingsPaging();
+  const [user] = useAtom(userAtom);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useFetchRankingsPaging();
   const rankings = data?.pages.flatMap((page) => page.rankings) || [];
+  const { mutate: deleteRank } = useDeleteRank();
+
+  const handleDelete = async (rankId) => {
+    if (window.confirm("정말로 이 데이터를 삭제하시겠습니까?")) {
+      try {
+        await deleteRank(rankId);
+        alert("삭제되었습니다.");
+        refetch();
+      } catch (e) {
+        alert("삭제에 실패하였습니다.")
+      }
+    }
+  };
   return (
     <>
       <Typography variant="h6" sx={{ textAlign: "center", mb: 2, mt: 4 }}>
@@ -14,7 +31,20 @@ const RankingList = () => {
       {rankings.length > 0 ? (
         <List sx={{ width: "100%" }}>
           {rankings.map((rank) => (
-            <Paper key={rank.id} sx={{ mb: 2, p: 2 }}>
+            <Paper key={rank.id} sx={{ mb: 2, p: 2, position: "relative" }}>
+              {user && (
+                <IconButton
+                  onClick={() => handleDelete(rank.id)}
+                  sx={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    color: "red",
+                  }}
+                >
+                  <Close />
+                </IconButton>
+              )}
               <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 {rank.gameName} - {rank.dateTime}
               </Typography>

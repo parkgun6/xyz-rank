@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { fbdb } from "../../config/firebase-config";
-import { addDoc, collection, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limit, orderBy, query, startAfter } from "firebase/firestore";
 
 export const authQueryKeys = {
   ranks: ['ranks'],
@@ -73,10 +73,22 @@ export const useInsertRank = () => {
           ranking: rankData.ranking,
           dateTime: rankData.dateTime
         });
-        console.log("Document written with ID: ", docRef.id);
       } catch (e) {
         console.error("Error adding document: ", e);
       }
     }
   })
 }
+
+export const useDeleteRank = () => {
+  return useMutation({
+    mutationFn: async (rankId) => {
+      try {
+        const rankDocRef = doc(fbdb, "rank", rankId); 
+        await deleteDoc(rankDocRef); 
+      } catch (e) {
+        console.error("Error deleting document: ", e);
+      }
+    }
+  });
+};

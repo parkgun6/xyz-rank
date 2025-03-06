@@ -52,7 +52,7 @@ const InsertRank = () => {
         try {
             await insertRankMutation.mutateAsync(rankData)
             alert("저장이 완료되었습니다!");
-            navigator(-1); // 이전 페이지로 이동
+            navigator(-1);
         } catch (e) {
             console.error("Error", e)
         }
